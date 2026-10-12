@@ -1,28 +1,24 @@
 'use strict';
 /* ============================================================
-   RIMA BEAT - Entrenador de freestyle en espanol  (Fase 1)
-   Bases reales libres (ccMixter, CC-BY) + rejilla y pelota al beat
+   RIMA BEAT - Entrenador de freestyle en espanol  (Fase 1.2)
+   Base ALEATORIA + rejilla simple; la pelota arranca en el "drop"
    ============================================================ */
 
 const DATOS = window.PALABRAS || { temas: {} };
 const LIB = window.BASES_LIB || [];
 const $ = (s) => document.querySelector(s);
 
-/* ---------------- Estado ---------------- */
 const S = {
-  base: null,            // base elegida de la biblioteca
-  modo: 'lib',           // 'lib' | 'file'
-  bpm: 90, spb: 60 / 90,
-  tema: null, esquema: 'AABB', compases: 8,
-  bars: [], n: 8,
-  offset: 0,             // ajuste fino (segundos)
-  playing: false, countIn: 4,
+  base: null, modo: 'lib',
+  bpm: 90, spb: 60 / 90, inicio: 0,
+  tema: 'mezcla', esquema: 'AABB', compases: 8,
+  bars: [], n: 8, playing: false, countIn: 4,
   raf: null, lastBar: -1, tapTimes: [],
 };
 
 let ctx = null, audioEl = null;
 
-/* ---------------- Audio (cuenta atras) ---------------- */
+/* ---------------- audio (solo cuenta atras) ---------------- */
 function initAudio() {
   if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
   if (ctx.state === 'suspended') ctx.resume();
@@ -34,10 +30,30 @@ function tick(t, accent) {
   o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + 0.06);
 }
 
-/* ---------------- Generar compases con rimas ---------------- */
+/* ---------------- base aleatoria ---------------- */
+function baseAleatoria() {
+  if (!LIB.length) return null;
+  let i = Math.floor(Math.random() * LIB.length);
+  if (LIB.length > 1 && S.base && LIB[i].archivo === S.base.archivo) i = (i + 1) % LIB.length;
+  return LIB[i];
+}
+function setBase(b) {
+  S.base = b; S.modo = 'lib';
+  S.bpm = b.bpm; S.spb = 60 / b.bpm; S.inicio = b.inicio || 0;
+  $('#baseNombre').textContent = b.nombre;
+  $('#baseMeta').textContent = `${b.bpm} BPM · ${b.artista}`;
+  $('#baseSel').value = b.archivo;
+  $('#credito').innerHTML = `${b.licencia} · <a href="${b.url}" target="_blank" rel="noopener">ccMixter</a>`;
+}
+
+/* ---------------- generar compases con rimas ---------------- */
 function rand(a) { return a[Math.floor(Math.random() * a.length)]; }
+function gruposDe(temaKey) {
+  if (temaKey === 'mezcla') return Object.values(DATOS.temas).flat();
+  return DATOS.temas[temaKey] || [];
+}
 function generarCompases(temaKey, esquema, n) {
-  const grupos = DATOS.temas[temaKey] || [];
+  const grupos = gruposDe(temaKey);
   const bars = [];
   if (!grupos.length) return bars;
   const mapa = esquema === 'AABB' ? [0, 0, 1, 1]
@@ -57,44 +73,31 @@ function generarCompases(temaKey, esquema, n) {
   return bars;
 }
 
-/* ---------------- Pantallas ---------------- */
+/* ---------------- pantallas ---------------- */
 function mostrar(id) {
   ['setup', 'game', 'review'].forEach((p) => { $('#' + p).hidden = (p !== id); });
 }
 
 /* ---------------- UI ---------------- */
-function pintarBases() {
-  const cont = $('#bases'); cont.innerHTML = '';
+function pintarBaseSel() {
+  const sel = $('#baseSel'); sel.innerHTML = '';
   LIB.forEach((b) => {
-    const el = document.createElement('button');
-    const sel = S.modo === 'lib' && S.base && S.base.archivo === b.archivo;
-    el.className = 'base' + (sel ? ' sel' : '');
-    el.innerHTML = `<b>${b.nombre}</b><span>${b.bpm} BPM · ${b.artista}</span>`;
-    el.onclick = () => {
-      S.base = b; S.bpm = b.bpm; S.spb = 60 / b.bpm; S.modo = 'lib';
-      $('#fileInfo').textContent = '';
-      pintarBases(); pintarCredito();
-    };
-    cont.appendChild(el);
-  });
-}
-function pintarCredito() {
-  const c = $('#credito');
-  if (S.modo === 'lib' && S.base) {
-    c.innerHTML = `Base: <b>${S.base.nombre}</b> — ${S.base.artista} · ${S.base.licencia} · ` +
-      `<a href="${S.base.url}" target="_blank" rel="noopener">ccMixter</a>`;
-  } else { c.textContent = ''; }
-}
-function pintarTemas() {
-  const sel = $('#tema'); sel.innerHTML = '';
-  const claves = Object.keys(DATOS.temas);
-  claves.forEach((k) => {
     const o = document.createElement('option');
-    o.value = k; o.textContent = k.charAt(0).toUpperCase() + k.slice(1);
+    o.value = b.archivo; o.textContent = `${b.nombre} · ${b.bpm} BPM`;
     sel.appendChild(o);
   });
-  S.tema = claves[0];
-  sel.onchange = () => { S.tema = sel.value; };
+  sel.onchange = () => { const b = LIB.find((x) => x.archivo === sel.value); if (b) setBase(b); };
+}
+function pintarTemas() {
+  const cont = $('#temas'); cont.innerHTML = '';
+  const opciones = ['mezcla', ...Object.keys(DATOS.temas)];
+  opciones.forEach((k) => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (k === S.tema ? ' sel' : '');
+    b.textContent = k === 'mezcla' ? '🎲 Mezcla' : k.charAt(0).toUpperCase() + k.slice(1);
+    b.onclick = () => { S.tema = k; pintarTemas(); };
+    cont.appendChild(b);
+  });
 }
 function pintarOpciones() {
   const esq = $('#esquemas'); esq.innerHTML = '';
@@ -107,13 +110,13 @@ function pintarOpciones() {
   const dur = $('#duraciones'); dur.innerHTML = '';
   [8, 16, 32].forEach((n) => {
     const b = document.createElement('button');
-    b.className = 'chip' + (n === S.compases ? ' sel' : ''); b.textContent = n + ' compases';
+    b.className = 'chip' + (n === S.compases ? ' sel' : ''); b.textContent = n;
     b.onclick = () => { S.compases = n; pintarOpciones(); };
     dur.appendChild(b);
   });
 }
 
-/* ---------------- Tap tempo ---------------- */
+/* ---------------- tap tempo (base propia) ---------------- */
 function tap() {
   const now = performance.now();
   S.tapTimes = S.tapTimes.filter((t) => now - t < 2500);
@@ -127,19 +130,18 @@ function tap() {
   } else { $('#tapInfo').textContent = 'sigue marcando...'; }
 }
 
-/* ---------------- Rejilla ---------------- */
+/* ---------------- rejilla + pelota ---------------- */
 function pintarGrid() {
   const grid = $('#grid'); grid.innerHTML = '';
   const fin = Math.min(S.n, S.lastBar + 4);
   for (let b = S.lastBar; b < fin; b++) {
     const row = document.createElement('div');
-    row.className = 'row' + (b === S.lastBar ? ' active' : '') + (b < S.lastBar ? ' done' : '');
-    row.dataset.bar = b;
+    row.className = 'row' + (b === S.lastBar ? ' active' : '');
     const track = document.createElement('div'); track.className = 'track';
     for (let c = 0; c < 4; c++) {
       const cell = document.createElement('div');
       cell.className = 'cell' + (c === 3 ? ' word col-' + S.bars[b].color : '');
-      cell.textContent = (c === 3) ? S.bars[b].palabra : (c + 1);
+      cell.textContent = (c === 3) ? S.bars[b].palabra : '';
       track.appendChild(cell);
     }
     if (b === S.lastBar) {
@@ -149,18 +151,15 @@ function pintarGrid() {
     row.appendChild(track); grid.appendChild(row);
   }
   const cur = S.bars[S.lastBar];
-  if (cur) $('#pistaWords').textContent = cur.rimas.slice(0, 10).join(' · ');
+  if (cur) $('#pistaWords').textContent = cur.rimas.slice(0, 9).join(' · ');
 }
 
-function tSec() { return audioEl ? audioEl.currentTime - S.offset : 0; }
+function tSec() { return audioEl ? audioEl.currentTime - S.inicio : 0; }
 
 function loop() {
   if (!S.playing) return;
   const beat = tSec() / S.spb;
-  if (beat < 0) {
-    $('#progreso').textContent = 'Preparate...';
-    S.raf = requestAnimationFrame(loop); return;
-  }
+  if (beat < 0) { S.raf = requestAnimationFrame(loop); return; }
   const barIndex = Math.floor(beat / 4);
   if (barIndex >= S.n) { terminar(); return; }
   if (barIndex !== S.lastBar) { S.lastBar = barIndex; pintarGrid(); }
@@ -172,24 +171,25 @@ function loop() {
   const row = document.querySelector('.row.active .track');
   if (row) [...row.children].forEach((el, i) => el.classList.toggle('on', i === cell && el.classList.contains('cell')));
   $('#progreso').textContent = `Compas ${barIndex + 1} / ${S.n}`;
-  $('#bpmInfo').textContent = S.bpm + ' BPM';
   S.raf = requestAnimationFrame(loop);
 }
 
-/* ---------------- Arranque / parada ---------------- */
+/* ---------------- arranque / parada ---------------- */
 function empezar() {
-  if (!S.tema) return;
-  if (S.modo === 'lib' && !S.base) { alert('Elige una base de la biblioteca.'); return; }
-  if (S.modo === 'file' && !audioEl) { alert('Sube una base o elige una de la biblioteca.'); return; }
+  if (S.modo === 'lib' && !S.base) { setBase(baseAleatoria()); }
+  if (S.modo === 'file' && !audioEl) { alert('Sube una base o elige una.'); return; }
 
   S.bars = generarCompases(S.tema, S.esquema, S.compases);
   S.n = S.compases; S.spb = 60 / S.bpm; S.lastBar = 0; S.playing = true;
   mostrar('game'); pintarGrid();
+  $('#baseTag').textContent = (S.modo === 'lib' ? S.base.nombre + ' · ' : '') + S.bpm + ' BPM';
 
-  if (S.modo === 'lib') audioEl = new Audio('bases/' + S.base.archivo);
+  if (S.modo === 'lib') {
+    audioEl = new Audio('bases/' + S.base.archivo);
+    try { audioEl.currentTime = S.inicio; } catch (e) {}
+  }
   audioEl.onended = () => { if (S.playing) terminar(); };
 
-  // cuenta atras (4 tiempos) y arranca la base
   initAudio();
   const now = ctx.currentTime;
   for (let i = 0; i < S.countIn; i++) tick(now + 0.15 + i * S.spb, i === 0);
@@ -197,51 +197,40 @@ function empezar() {
   $('#progreso').textContent = 'Preparate...';
   setTimeout(() => {
     if (!S.playing) return;
-    audioEl.currentTime = 0;
+    try { audioEl.currentTime = S.inicio; } catch (e) {}
     audioEl.play().catch(() => {});
     cancelAnimationFrame(S.raf); S.raf = requestAnimationFrame(loop);
   }, espera);
 }
-
-function parar() {
-  S.playing = false;
-  cancelAnimationFrame(S.raf);
-  if (audioEl) audioEl.pause();
-}
+function parar() { S.playing = false; cancelAnimationFrame(S.raf); if (audioEl) audioEl.pause(); }
 function terminar() {
   parar();
   $('#rCompases').textContent = S.n;
   $('#rPalabras').textContent = new Set(S.bars.map((b) => b.palabra)).size;
-  $('#rTema').textContent = S.tema;
+  $('#rTema').textContent = S.tema === 'mezcla' ? 'mezcla' : S.tema;
   mostrar('review');
 }
 
-/* ---------------- Ajuste fino ---------------- */
-function nudge(d) {
-  S.offset = Math.round((S.offset + d) * 1000) / 1000;
-  $('#offInfo').textContent = (S.offset >= 0 ? '+' : '') + Math.round(S.offset * 1000) + ' ms';
-}
-
-/* ---------------- Init ---------------- */
+/* ---------------- init ---------------- */
 function init() {
-  if (LIB.length) { S.base = LIB[0]; S.bpm = LIB[0].bpm; S.spb = 60 / LIB[0].bpm; }
-  pintarBases(); pintarTemas(); pintarOpciones(); pintarCredito();
+  if (LIB.length) setBase(baseAleatoria());
+  pintarBaseSel(); pintarTemas(); pintarOpciones();
 
-  $('#tapBtn').onclick = tap;
+  $('#otraBase').onclick = () => setBase(baseAleatoria());
   $('#start').onclick = empezar;
   $('#stop').onclick = () => { parar(); mostrar('setup'); };
-  $('#otra').onclick = () => empezar();
+  $('#otra').onclick = () => { if (S.modo === 'lib') setBase(baseAleatoria()); empezar(); };
   $('#cambiar').onclick = () => { parar(); mostrar('setup'); };
-  $('#offPrev').onclick = () => nudge(-0.03);
-  $('#offNext').onclick = () => nudge(0.03);
-  nudge(0);
+  $('#tapBtn').onclick = tap;
 
   $('#fileBase').onchange = (e) => {
     const f = e.target.files[0]; if (!f) return;
     audioEl = new Audio(URL.createObjectURL(f));
-    S.modo = 'file'; S.base = null;
-    $('#fileInfo').textContent = f.name + '  (marca el ritmo con TAP)';
-    pintarBases(); pintarCredito();
+    S.modo = 'file'; S.inicio = 0; S.base = null;
+    $('#fileInfo').textContent = f.name;
+    $('#baseNombre').textContent = f.name;
+    $('#baseMeta').textContent = 'tu base · marca el ritmo con TAP';
+    $('#credito').textContent = '';
   };
 }
 document.addEventListener('DOMContentLoaded', init);

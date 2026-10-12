@@ -1,4 +1,4 @@
-// RIMA BEAT - biblioteca de bases libres (ccMixter, CC-BY)
+// RIMA BEAT - biblioteca de bases libres (ccMixter, CC-BY) + punto de entrada
 window.BASES_LIB = [
  {
   "archivo": "080-drops-of-h2o-the-filtered-water-treatmen.mp3",
@@ -9,7 +9,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/3.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/djlang59/djlang59_-_Drops_of_H2O_(_The_Filtered_Water_Treatment_).mp3",
-  "duracion": 315
+  "duracion": 315,
+  "inicio": 0.56
  },
  {
   "archivo": "080-shiro-kirkoid-mix.mp3",
@@ -20,7 +21,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/3.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/Kirkoid/Kirkoid_-_Shiro_(Kirkoid_Mix)_1.mp3",
-  "duracion": 123
+  "duracion": 123,
+  "inicio": 12.0
  },
  {
   "archivo": "090-i-dunno.mp3",
@@ -31,7 +33,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/3.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/grapes/grapes_-_I_dunno.mp3",
-  "duracion": 165
+  "duracion": 165,
+  "inicio": 0.04
  },
  {
   "archivo": "090-stop-blue-mix.mp3",
@@ -42,7 +45,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/2.5/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/Ghost_k/Ghost_k_-_Stop_(blue_mix).mp3",
-  "duracion": 216
+  "duracion": 216,
+  "inicio": 1.36
  },
  {
   "archivo": "090-space-bazooka.mp3",
@@ -53,7 +57,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/3.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/Kirkoid/Kirkoid_-_Space_Bazooka_1.mp3",
-  "duracion": 134
+  "duracion": 134,
+  "inicio": 0.36
  },
  {
   "archivo": "095-once.mp3",
@@ -64,7 +69,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/3.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/DoKashiteru/DoKashiteru_-_Once.mp3",
-  "duracion": 289
+  "duracion": 289,
+  "inicio": 10.16
  },
  {
   "archivo": "100-urbana-metronica-wooh-yeah-mix.mp3",
@@ -75,7 +81,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/3.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/jlbrock44/jlbrock44_-_Urbana-Metronica_(wooh-yeah_mix).mp3",
-  "duracion": 207
+  "duracion": 207,
+  "inicio": 0.2
  },
  {
   "archivo": "100-funk-it-how-it-is-ft-alex-unreal-dm.mp3",
@@ -86,7 +93,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by-sa/3.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/SackJo22/SackJo22_-_Funk_It_How_It_Is_(ft_Alex_unreal_dm).mp3",
-  "duracion": 134
+  "duracion": 134,
+  "inicio": 0.52
  },
  {
   "archivo": "100-b-calm-violin-track.mp3",
@@ -97,7 +105,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/2.5/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/stringfactory/stringfactory_-_B_Calm_Violin_Track_2.mp3",
-  "duracion": 109
+  "duracion": 109,
+  "inicio": 0.96
  },
  {
   "archivo": "109-parametaphoriquement.mp3",
@@ -108,7 +117,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/3.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/gmz/gmz_-_Parametaphoriquement.mp3",
-  "duracion": 289
+  "duracion": 289,
+  "inicio": 18.72
  },
  {
   "archivo": "115-never-heard-a-rhyme-like-this-before.mp3",
@@ -119,7 +129,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/2.5/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/scottaltham/scottaltham_-_Never_Heard_a_Rhyme_Like_This_Before.mp3",
-  "duracion": 250
+  "duracion": 250,
+  "inicio": 29.04
  },
  {
   "archivo": "118-this-is-independence-day.mp3",
@@ -130,7 +141,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/3.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/scomber/scomber_-_This_is_Independence_Day.mp3",
-  "duracion": 297
+  "duracion": 297,
+  "inicio": 5.84
  },
  {
   "archivo": "120-brake-dance.mp3",
@@ -141,7 +153,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/3.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/andrewfranco/andrewfranco_-_Brake_Dance.mp3",
-  "duracion": 200
+  "duracion": 200,
+  "inicio": 1.32
  },
  {
   "archivo": "130-bilderbergin.mp3",
@@ -152,7 +165,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/3.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/Robbero/Robbero_-_Bilderbergin.mp3",
-  "duracion": 208
+  "duracion": 208,
+  "inicio": 0.4
  },
  {
   "archivo": "140-silence-await.mp3",
@@ -163,7 +177,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/3.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/cdk/cdk_-_Silence_Await.mp3",
-  "duracion": 199
+  "duracion": 199,
+  "inicio": 0.04
  },
  {
   "archivo": "140-the-haunted-hotel.mp3",
@@ -174,7 +189,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/3.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/SackJo22/SackJo22_-_The_Haunted_Hotel.mp3",
-  "duracion": 247
+  "duracion": 247,
+  "inicio": 0.08
  },
  {
   "archivo": "153-spinnin.mp3",
@@ -185,7 +201,8 @@ window.BASES_LIB = [
   "licencia_url": "http://creativecommons.org/licenses/by/3.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/AlexBeroza/AlexBeroza_-_Spinnin_.mp3",
-  "duracion": 212
+  "duracion": 212,
+  "inicio": 1.0
  },
  {
   "archivo": "165-double-homicide.mp3",
@@ -196,6 +213,7 @@ window.BASES_LIB = [
   "licencia_url": "https://creativecommons.org/licenses/by/4.0/",
   "fuente": "ccMixter",
   "url": "https://ccmixter.org/content/Coruscate/Coruscate_-_Double_Homicide.mp3",
-  "duracion": 70
+  "duracion": 70,
+  "inicio": 0.04
  }
 ];

@@ -12,72 +12,64 @@
   *{box-sizing:border-box}
   body{margin:0;background:radial-gradient(1200px 600px at 50% -10%,#16213a,var(--bg));
        color:var(--txt);font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif;min-height:100vh}
-  .wrap{max-width:860px;margin:0 auto;padding:22px 18px 60px}
-  header{text-align:center;margin-bottom:22px}
-  header h1{margin:0;font-size:38px;letter-spacing:4px;
+  .wrap{max-width:780px;margin:0 auto;padding:22px 18px 60px}
+  header{text-align:center;margin-bottom:20px}
+  header h1{margin:0;font-size:40px;letter-spacing:5px;
     background:linear-gradient(90deg,var(--acc),#9d7bff);-webkit-background-clip:text;background-clip:text;color:transparent}
   header p{margin:4px 0 0;color:var(--mut);letter-spacing:1px}
-  h2{font-size:14px;text-transform:uppercase;letter-spacing:2px;color:var(--mut);margin:22px 0 10px}
-  #bases{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-height:330px;overflow:auto;padding-right:4px}
-  .base{text-align:left;background:var(--card);border:1px solid var(--line);color:var(--txt);
-    border-radius:12px;padding:11px 13px;cursor:pointer;transition:.15s}
-  .base:hover{border-color:var(--acc)}
-  .base.sel{border-color:var(--acc);background:var(--card2);box-shadow:0 0 0 1px var(--acc) inset}
-  .base b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .base span{color:var(--mut);font-size:12px}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:2px;color:var(--mut);margin:0 0 10px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:14px}
+  .baseline{display:flex;align-items:center;gap:14px}
+  .baseline b{font-size:20px;display:block}
+  .baseline span{color:var(--mut);font-size:13px}
+  #otraBase{margin-left:auto;background:var(--card2);border:1px solid var(--acc);color:var(--txt);
+    border-radius:12px;padding:10px 14px;cursor:pointer;white-space:nowrap}
+  #otraBase:hover{background:var(--acc);color:#06101f}
+  select{width:100%;margin-top:12px;background:var(--card2);border:1px solid var(--line);color:var(--txt);
+    border-radius:12px;padding:10px 12px;font-size:14px}
+  #credito{margin-top:10px;color:var(--mut);font-size:12px}
+  #credito a{color:var(--acc)}
   .chips{display:flex;gap:8px;flex-wrap:wrap}
-  .chip{background:var(--card);border:1px solid var(--line);color:var(--txt);
+  .chip{background:var(--card2);border:1px solid var(--line);color:var(--txt);
     border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px}
   .chip.sel{background:var(--acc);border-color:var(--acc);color:#06101f;font-weight:600}
-  select{width:100%;background:var(--card);border:1px solid var(--line);color:var(--txt);
-    border-radius:12px;padding:12px 14px;font-size:16px}
-  .fila{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px}
-  .fila label{background:var(--card);border:1px dashed var(--line);border-radius:12px;
-    padding:10px 14px;cursor:pointer;color:var(--mut);font-size:14px}
-  .fila label:hover{border-color:var(--acc);color:var(--txt)}
-  #fileInfo{color:var(--ok);font-size:13px}
-  #tapBtn{background:var(--card2);border:1px solid var(--acc);color:var(--txt);
-    border-radius:12px;padding:10px 16px;cursor:pointer}
-  #tapInfo{color:var(--acc2);font-weight:600}
-  #credito{margin-top:12px;color:var(--mut);font-size:12.5px}
-  #credito a{color:var(--acc)}
-  .cta{width:100%;margin-top:26px;padding:18px;font-size:20px;font-weight:700;letter-spacing:1px;
-    border:0;border-radius:16px;cursor:pointer;color:#06101f;
-    background:linear-gradient(90deg,var(--acc),#7db1ff)}
+  .sub{color:var(--mut);font-size:13px;margin:12px 0 8px}
+  .cta{width:100%;margin-top:8px;padding:20px;font-size:22px;font-weight:800;letter-spacing:1px;
+    border:0;border-radius:18px;cursor:pointer;color:#06101f;
+    background:linear-gradient(90deg,var(--acc),#7db1ff);box-shadow:0 8px 30px rgba(79,140,255,.25)}
   .cta:hover{filter:brightness(1.08)}
-  /* Juego */
-  .hud{display:flex;justify-content:space-between;align-items:center;color:var(--mut);font-size:14px;margin-bottom:10px;letter-spacing:1px;gap:10px;flex-wrap:wrap}
-  .ajuste{display:flex;align-items:center;gap:6px}
-  .ajuste button{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:8px;
-    padding:3px 9px;cursor:pointer;font-size:13px}
-  #offInfo{min-width:64px;text-align:center;color:var(--acc2)}
+  details{margin-top:14px;color:var(--mut);font-size:13px}
+  details summary{cursor:pointer}
+  .fila{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+  .fila label{background:var(--card2);border:1px dashed var(--line);border-radius:10px;padding:8px 12px;cursor:pointer}
+  #tapBtn{background:var(--card2);border:1px solid var(--acc);color:var(--txt);border-radius:10px;padding:8px 12px;cursor:pointer}
+  #tapInfo,#fileInfo{color:var(--acc2)}
+  /* juego */
+  .hud{display:flex;justify-content:space-between;color:var(--mut);font-size:14px;margin-bottom:12px;letter-spacing:1px}
   #grid{display:flex;flex-direction:column;gap:10px}
-  .row{opacity:.4;transition:.2s}
+  .row{opacity:.35;transition:.2s}
   .row.active{opacity:1}
   .track{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-  .cell{background:var(--card);border:1px solid var(--line);border-radius:12px;
-    height:64px;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--mut)}
+  .cell{background:var(--card);border:1px solid var(--line);border-radius:12px;height:66px}
   .cell.on{border-color:var(--acc);background:var(--card2)}
-  .cell.word{font-size:22px;font-weight:700;color:var(--txt)}
-  .cell.word.col-A{border-color:var(--acc);background:rgba(79,140,255,.16)}
-  .cell.word.col-B{border-color:var(--acc2);background:rgba(255,180,84,.16)}
+  .cell.word{display:flex;align-items:center;justify-content:center;font-size:23px;font-weight:800}
+  .cell.word.col-A{border-color:var(--acc);background:rgba(79,140,255,.18)}
+  .cell.word.col-B{border-color:var(--acc2);background:rgba(255,180,84,.18)}
   .ball{position:absolute;top:8px;width:18px;height:18px;border-radius:50%;
     background:var(--ok);box-shadow:0 0 14px var(--ok);transform:translateX(-50%)}
-  #pista{margin-top:20px;background:var(--card);border:1px solid var(--line);
-    border-radius:14px;padding:14px 16px;font-size:15px}
-  #pistaLabel{color:var(--mut);font-size:13px;text-transform:uppercase;letter-spacing:2px;display:block;margin-bottom:6px}
-  #pistaWords{color:var(--acc2);font-weight:600}
-  #stop{margin-top:16px;background:transparent;border:1px solid var(--line);color:var(--mut);
-    border-radius:12px;padding:10px 18px;cursor:pointer}
-  /* Review */
+  #pista{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  #pistaLabel{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:2px;display:block;margin-bottom:6px}
+  #pistaWords{color:var(--acc2);font-weight:700}
+  #stop{margin-top:16px;background:transparent;border:1px solid var(--line);color:var(--mut);border-radius:12px;padding:10px 18px;cursor:pointer}
+  /* review */
   #review{text-align:center}
-  #review h3{font-size:30px;margin:10px 0}
+  #review h3{font-size:30px;margin:6px 0}
   .stats{display:flex;gap:14px;justify-content:center;margin:20px 0}
   .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 22px;min-width:110px}
   .stat b{display:block;font-size:30px;color:var(--acc)}
   .stat span{color:var(--mut);font-size:13px}
   .btns{display:flex;gap:12px;justify-content:center}
-  .btns button{padding:14px 24px;border-radius:12px;border:0;cursor:pointer;font-size:16px;font-weight:600}
+  .btns button{padding:14px 26px;border-radius:12px;border:0;cursor:pointer;font-size:16px;font-weight:700}
   #otra{background:var(--acc);color:#06101f}
   #cambiar{background:var(--card);color:var(--txt);border:1px solid var(--line)!important}
 </style>
@@ -89,46 +81,48 @@
     <p>Entrena tu freestyle · di la rima justo en el beat</p>
   </header>
 
-  <!-- CONFIGURACION -->
   <section id="setup">
-    <h2>1 · Elige tu base</h2>
-    <div id="bases"></div>
-    <div class="fila">
-      <label>⬆ Sube tu propia base<input type="file" id="fileBase" accept="audio/*" hidden></label>
-      <button id="tapBtn">🥁 Marcar ritmo (TAP)</button>
-      <span id="tapInfo"></span>
+    <div class="card">
+      <h2>Tu base</h2>
+      <div class="baseline">
+        <div><b id="baseNombre">—</b><span id="baseMeta"></span></div>
+        <button id="otraBase">🎲 Otra base</button>
+      </div>
+      <select id="baseSel" title="Elegir una base concreta"></select>
+      <div id="credito"></div>
     </div>
-    <div class="fila"><span id="fileInfo"></span></div>
-    <div id="credito"></div>
 
-    <h2>2 · Tema de palabras</h2>
-    <select id="tema"></select>
+    <div class="card">
+      <h2>Tema de palabras</h2>
+      <div id="temas" class="chips"></div>
+      <div class="sub">Esquema de rima</div>
+      <div id="esquemas" class="chips"></div>
+      <div class="sub">Duración (compases)</div>
+      <div id="duraciones" class="chips"></div>
+    </div>
 
-    <h2>3 · Esquema de rima</h2>
-    <div id="esquemas" class="chips"></div>
+    <button class="cta" id="start">▶ A RIMAR</button>
 
-    <h2>4 · Duracion</h2>
-    <div id="duraciones" class="chips"></div>
-
-    <button class="cta" id="start">¡A RIMAR! 🎤</button>
+    <details>
+      <summary>Subir mi propia base (opcional)</summary>
+      <div class="fila">
+        <label>⬆ Elegir archivo<input type="file" id="fileBase" accept="audio/*" hidden></label>
+        <button id="tapBtn">🥁 Marcar ritmo</button>
+        <span id="tapInfo"></span><span id="fileInfo"></span>
+      </div>
+    </details>
   </section>
 
-  <!-- JUEGO -->
   <section id="game" hidden>
-    <div class="hud">
-      <span id="progreso">Compas 1</span>
-      <span class="ajuste">Ajuste <button id="offPrev">◀</button><span id="offInfo"></span><button id="offNext">▶</button></span>
-      <span id="bpmInfo"></span>
-    </div>
+    <div class="hud"><span id="progreso">Compas 1</span><span id="baseTag"></span></div>
     <div id="grid"></div>
     <div id="pista"><span id="pistaLabel">Rima con</span><span id="pistaWords"></span></div>
     <button id="stop">◼ Parar</button>
   </section>
 
-  <!-- RESULTADO -->
   <section id="review" hidden>
     <h3>¡Buen trabajo! 🔥</h3>
-    <p style="color:var(--mut)">Has rapeado sobre el tema <b id="rTema"></b>.</p>
+    <p style="color:var(--mut)">Tema <b id="rTema"></b></p>
     <div class="stats">
       <div class="stat"><b id="rCompases">0</b><span>compases</span></div>
       <div class="stat"><b id="rPalabras">0</b><span>rimas</span></div>
