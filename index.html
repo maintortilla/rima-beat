@@ -6,86 +6,165 @@
 <title>RIMA BEAT — Entrena tu freestyle</title>
 <style>
   :root{
-    --bg:#0b0e14; --card:#141a24; --card2:#1b2330; --line:#26303f;
-    --txt:#e8eef7; --mut:#8b9bb0; --acc:#4f8cff; --acc2:#ffb454; --ok:#3ddc97;
+    --bg:#08061a;
+    --violeta:#a855f7; --rosa:#ff3d9a; --cian:#22d3ee; --lima:#a3e635; --naranja:#ff9f43;
+    --txt:#f4f1ff; --mut:#b7aede;
+    --panel:rgba(255,255,255,.05); --borde:rgba(255,255,255,.12);
+    --grad:linear-gradient(120deg,#a855f7,#ff3d9a 48%,#22d3ee);
+    --fuente:"Segoe UI Variable Display","Segoe UI",system-ui,sans-serif;
+    --mono:"Cascadia Mono","Consolas",monospace;
   }
   *{box-sizing:border-box}
-  body{margin:0;background:radial-gradient(1200px 600px at 50% -10%,#16213a,var(--bg));
-       color:var(--txt);font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif;min-height:100vh}
-  .wrap{max-width:780px;margin:0 auto;padding:22px 18px 60px}
-  header{text-align:center;margin-bottom:20px}
-  header h1{margin:0;font-size:40px;letter-spacing:5px;
-    background:linear-gradient(90deg,var(--acc),#9d7bff);-webkit-background-clip:text;background-clip:text;color:transparent}
-  header p{margin:4px 0 0;color:var(--mut);letter-spacing:1px}
-  h2{font-size:13px;text-transform:uppercase;letter-spacing:2px;color:var(--mut);margin:0 0 10px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:14px}
-  .baseline{display:flex;align-items:center;gap:14px}
-  .baseline b{font-size:20px;display:block}
-  .baseline span{color:var(--mut);font-size:13px}
-  #otraBase{margin-left:auto;background:var(--card2);border:1px solid var(--acc);color:var(--txt);
-    border-radius:12px;padding:10px 14px;cursor:pointer;white-space:nowrap}
-  #otraBase:hover{background:var(--acc);color:#06101f}
-  select{width:100%;margin-top:12px;background:var(--card2);border:1px solid var(--line);color:var(--txt);
-    border-radius:12px;padding:10px 12px;font-size:14px}
-  #credito{margin-top:10px;color:var(--mut);font-size:12px}
-  #credito a{color:var(--acc)}
-  .chips{display:flex;gap:8px;flex-wrap:wrap}
-  .chip{background:var(--card2);border:1px solid var(--line);color:var(--txt);
-    border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px}
-  .chip.sel{background:var(--acc);border-color:var(--acc);color:#06101f;font-weight:600}
-  .sub{color:var(--mut);font-size:13px;margin:12px 0 8px}
-  .cta{width:100%;margin-top:8px;padding:20px;font-size:22px;font-weight:800;letter-spacing:1px;
-    border:0;border-radius:18px;cursor:pointer;color:#06101f;
-    background:linear-gradient(90deg,var(--acc),#7db1ff);box-shadow:0 8px 30px rgba(79,140,255,.25)}
-  .cta:hover{filter:brightness(1.08)}
-  details{margin-top:14px;color:var(--mut);font-size:13px}
-  details summary{cursor:pointer}
-  .fila{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
-  .fila label{background:var(--card2);border:1px dashed var(--line);border-radius:10px;padding:8px 12px;cursor:pointer}
-  #tapBtn{background:var(--card2);border:1px solid var(--acc);color:var(--txt);border-radius:10px;padding:8px 12px;cursor:pointer}
-  #tapInfo,#fileInfo{color:var(--acc2)}
-  /* juego */
-  .hud{display:flex;justify-content:space-between;color:var(--mut);font-size:14px;margin-bottom:12px;letter-spacing:1px}
-  #grid{display:flex;flex-direction:column;gap:10px}
-  .row{opacity:.35;transition:.2s}
-  .row.active{opacity:1}
-  .track{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-  .cell{background:var(--card);border:1px solid var(--line);border-radius:12px;height:66px}
-  .cell.on{border-color:var(--acc);background:var(--card2)}
-  .cell.word{display:flex;align-items:center;justify-content:center;font-size:23px;font-weight:800}
-  .cell.word.col-A{border-color:var(--acc);background:rgba(79,140,255,.18)}
-  .cell.word.col-B{border-color:var(--acc2);background:rgba(255,180,84,.18)}
-  .ball{position:absolute;top:8px;width:18px;height:18px;border-radius:50%;
-    background:var(--ok);box-shadow:0 0 14px var(--ok);transform:translateX(-50%)}
-  #pista{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
-  #pistaLabel{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:2px;display:block;margin-bottom:6px}
-  #pistaWords{color:var(--acc2);font-weight:700}
-  #stop{margin-top:16px;background:transparent;border:1px solid var(--line);color:var(--mut);border-radius:12px;padding:10px 18px;cursor:pointer}
-  /* review */
+  html,body{margin:0;min-height:100%}
+  body{
+    background:var(--bg); color:var(--txt);
+    font:17px/1.55 var(--fuente); min-height:100vh; overflow-x:hidden;
+  }
+  /* manchas de color de fondo */
+  body::before{
+    content:""; position:fixed; inset:-20%; z-index:-1; pointer-events:none;
+    background:
+      radial-gradient(38% 42% at 12% 8%,  rgba(168,85,247,.55), transparent 70%),
+      radial-gradient(36% 40% at 88% 12%, rgba(255,61,154,.50), transparent 70%),
+      radial-gradient(42% 46% at 78% 92%, rgba(34,211,238,.42), transparent 70%),
+      radial-gradient(40% 44% at 18% 95%, rgba(163,230,53,.32), transparent 70%);
+    filter:blur(20px); animation:flotar 22s ease-in-out infinite alternate;
+  }
+  @keyframes flotar{
+    from{transform:translate3d(-2%,-1%,0) scale(1)}
+    to{transform:translate3d(2%,2%,0) scale(1.08)}
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:26px 20px 70px}
+  header{text-align:center;margin-bottom:24px}
+  header h1{
+    margin:0; font-size:clamp(40px,7vw,68px); letter-spacing:6px; font-weight:800;
+    background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 0 26px rgba(255,61,154,.45));
+  }
+  header p{margin:6px 0 0;color:var(--mut);letter-spacing:1px;font-size:16px}
+
+  h2{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--mut);margin:0 0 12px;font-weight:700}
+
+  .card{
+    background:var(--panel); border:1px solid var(--borde); border-radius:22px;
+    padding:20px 22px; margin-bottom:16px; backdrop-filter:blur(14px);
+    box-shadow:0 10px 40px rgba(0,0,0,.35); position:relative; overflow:hidden;
+  }
+  .card::after{
+    content:""; position:absolute; inset:0 0 auto 0; height:3px; background:var(--grad); opacity:.9;
+  }
+  .baseline{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .baseline b{
+    font-size:26px;display:block;line-height:1.15;
+    background:linear-gradient(90deg,#fff,#ffd6f0); -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .baseline span{color:var(--mut);font-size:14px;font-family:var(--mono)}
+  #baseTag2{color:var(--lima)!important;font-size:13px;font-family:var(--fuente)}
+  #otraBase{
+    margin-left:auto; border:0; border-radius:14px; padding:13px 20px; cursor:pointer;
+    font-size:15px; font-weight:800; color:#12061f;
+    background:linear-gradient(120deg,#ffd166,#ff9f43);
+    box-shadow:0 8px 26px rgba(255,159,67,.45); transition:transform .15s, box-shadow .15s;
+  }
+  #otraBase:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(255,159,67,.6)}
+  select{
+    width:100%; margin-top:14px; background:rgba(0,0,0,.35); color:var(--txt);
+    border:1px solid var(--borde); border-radius:14px; padding:12px 14px; font-size:15px; font-family:var(--fuente);
+  }
+  #credito{margin-top:12px;color:var(--mut);font-size:12.5px}
+  #credito a{color:var(--cian)}
+
+  .chips{display:flex;gap:9px;flex-wrap:wrap}
+  .chip{
+    background:rgba(255,255,255,.05); border:1px solid var(--borde); color:var(--txt);
+    border-radius:999px; padding:10px 18px; cursor:pointer; font-size:15px; font-weight:600;
+    transition:transform .12s, box-shadow .15s, background .15s;
+  }
+  .chip:hover{transform:translateY(-2px);background:rgba(255,255,255,.1)}
+  .chip.sel{
+    color:#10061c; border-color:transparent;
+    background:linear-gradient(120deg,var(--violeta),var(--rosa));
+    box-shadow:0 6px 22px rgba(255,61,154,.5);
+  }
+  .sub{color:var(--mut);font-size:13px;margin:16px 0 9px;letter-spacing:.5px}
+
+  .cta{
+    width:100%; margin-top:6px; padding:22px; font-size:24px; font-weight:900; letter-spacing:1.5px;
+    border:0; border-radius:20px; cursor:pointer; color:#10061c;
+    background:linear-gradient(120deg,#a855f7,#ff3d9a 45%,#22d3ee);
+    background-size:220% 100%;
+    box-shadow:0 12px 44px rgba(168,85,247,.5), 0 0 0 1px rgba(255,255,255,.15) inset;
+    animation:mover 6s ease infinite; transition:transform .15s;
+  }
+  @keyframes mover{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+  .cta:hover{transform:translateY(-3px) scale(1.01)}
+
+  details{margin-top:18px;color:var(--mut);font-size:14px}
+  details summary{cursor:pointer;font-weight:600}
+  .fila{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px}
+  .fila label{background:rgba(255,255,255,.06);border:1px dashed var(--borde);border-radius:12px;padding:11px 15px;cursor:pointer}
+  #tapBtn{background:rgba(34,211,238,.15);border:1px solid var(--cian);color:var(--txt);border-radius:12px;padding:11px 15px;cursor:pointer;font-weight:700}
+  #tapInfo,#fileInfo{color:var(--lima);font-family:var(--mono)}
+
+  /* ---- juego ---- */
+  .hud{display:flex;justify-content:space-between;color:var(--mut);font-size:14px;margin-bottom:16px;letter-spacing:1px;font-family:var(--mono)}
+  #progreso{color:var(--cian);font-weight:700}
+  #grid{display:flex;flex-direction:column;gap:12px}
+  .row{opacity:.32;transition:opacity .25s, transform .25s}
+  .row.active{opacity:1;transform:scale(1.01)}
+  .track{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .cell{background:rgba(255,255,255,.04);border:1px solid var(--borde);border-radius:16px;height:72px}
+  .cell.on{
+    background:linear-gradient(120deg,rgba(34,211,238,.35),rgba(168,85,247,.35));
+    border-color:var(--cian); box-shadow:0 0 26px rgba(34,211,238,.55);
+  }
+  .cell.word{display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;
+    text-shadow:0 0 18px rgba(255,255,255,.35)}
+  .cell.word.col-A{border-color:var(--rosa);background:linear-gradient(120deg,rgba(255,61,154,.4),rgba(168,85,247,.4));box-shadow:0 0 22px rgba(255,61,154,.4)}
+  .cell.word.col-B{border-color:var(--lima);background:linear-gradient(120deg,rgba(163,230,53,.35),rgba(34,211,238,.4));box-shadow:0 0 22px rgba(163,230,53,.4)}
+  .ball{position:absolute;top:7px;width:22px;height:22px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#fff,#a3e635 55%,#22d3ee);
+    box-shadow:0 0 20px var(--lima),0 0 42px rgba(163,230,53,.7);transform:translateX(-50%)}
+  #pista{margin-top:24px;background:var(--panel);border:1px solid var(--borde);border-radius:18px;padding:16px 18px;backdrop-filter:blur(10px)}
+  #pistaLabel{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:2.5px;display:block;margin-bottom:7px}
+  #pistaWords{font-weight:800;font-size:17px;background:linear-gradient(90deg,#a3e635,#22d3ee,#ff3d9a);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  #stop{margin-top:18px;background:rgba(255,61,154,.12);border:1px solid var(--rosa);color:var(--txt);
+    border-radius:14px;padding:12px 22px;cursor:pointer;font-weight:700}
+
+  /* ---- resultado ---- */
   #review{text-align:center}
-  #review h3{font-size:30px;margin:6px 0}
-  .stats{display:flex;gap:14px;justify-content:center;margin:20px 0}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 22px;min-width:110px}
-  .stat b{display:block;font-size:30px;color:var(--acc)}
+  #review h3{font-size:34px;margin:8px 0;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stats{display:flex;gap:16px;justify-content:center;margin:22px 0;flex-wrap:wrap}
+  .stat{background:var(--panel);border:1px solid var(--borde);border-radius:18px;padding:18px 26px;min-width:130px}
+  .stat b{display:block;font-size:38px;font-family:var(--mono);
+    background:linear-gradient(120deg,#22d3ee,#a855f7);-webkit-background-clip:text;background-clip:text;color:transparent}
   .stat span{color:var(--mut);font-size:13px}
-  .btns{display:flex;gap:12px;justify-content:center}
-  .btns button{padding:14px 26px;border-radius:12px;border:0;cursor:pointer;font-size:16px;font-weight:700}
-  #otra{background:var(--acc);color:#06101f}
-  #cambiar{background:var(--card);color:var(--txt);border:1px solid var(--line)!important}
+  .btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btns button{padding:16px 30px;border-radius:16px;border:0;cursor:pointer;font-size:17px;font-weight:800}
+  #otra{background:linear-gradient(120deg,#a855f7,#ff3d9a);color:#10061c;box-shadow:0 10px 30px rgba(255,61,154,.45)}
+  #cambiar{background:rgba(255,255,255,.08);color:var(--txt);border:1px solid var(--borde)!important}
+
+  @media (prefers-reduced-motion: reduce){
+    body::before{animation:none}
+    .cta{animation:none}
+    *{transition:none!important}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <h1>RIMA BEAT</h1>
-    <p>Entrena tu freestyle · di la rima justo en el beat</p>
+    <p>Entrena tu freestyle · di la rima justo en el beat 🎤</p>
   </header>
 
   <section id="setup">
     <div class="card">
       <h2>Tu base</h2>
       <div class="baseline">
-        <div><b id="baseNombre">—</b><span id="baseMeta"></span> <em id="baseTag2" style="font-style:normal;color:var(--acc2);font-size:12px"></em></div>
+        <div><b id="baseNombre">—</b><span id="baseMeta"></span> <em id="baseTag2" style="font-style:normal"></em></div>
         <button id="otraBase">🎲 Otra base</button>
       </div>
       <select id="baseSel" title="Elegir una base concreta"></select>
