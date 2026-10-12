@@ -9,7 +9,7 @@ const LIB = window.BASES_LIB || [];
 const $ = (s) => document.querySelector(s);
 
 const S = {
-  base: null, modo: 'lib',
+  base: null, modo: 'lib', fijada: false,
   bpm: 90, spb: 60 / 90, inicio: 0,
   tema: 'mezcla', esquema: 'AABB', compases: 8,
   bars: [], n: 8, playing: false, countIn: 4,
@@ -37,12 +37,13 @@ function baseAleatoria() {
   if (LIB.length > 1 && S.base && LIB[i].archivo === S.base.archivo) i = (i + 1) % LIB.length;
   return LIB[i];
 }
-function setBase(b) {
-  S.base = b; S.modo = 'lib';
+function setBase(b, fijada) {
+  S.base = b; S.modo = 'lib'; S.fijada = !!fijada;
   S.bpm = b.bpm; S.spb = 60 / b.bpm; S.inicio = b.inicio || 0;
   $('#baseNombre').textContent = b.nombre;
   $('#baseMeta').textContent = `${b.bpm} BPM · ${b.artista}`;
   $('#baseSel').value = b.archivo;
+  $('#baseTag2').textContent = S.fijada ? '📌 elegida' : '🎲 aleatoria';
   $('#credito').innerHTML = `${b.licencia} · <a href="${b.url}" target="_blank" rel="noopener">ccMixter</a>`;
 }
 
@@ -86,7 +87,7 @@ function pintarBaseSel() {
     o.value = b.archivo; o.textContent = `${b.nombre} · ${b.bpm} BPM`;
     sel.appendChild(o);
   });
-  sel.onchange = () => { const b = LIB.find((x) => x.archivo === sel.value); if (b) setBase(b); };
+  sel.onchange = () => { const b = LIB.find((x) => x.archivo === sel.value); if (b) setBase(b, true); };
 }
 function pintarTemas() {
   const cont = $('#temas'); cont.innerHTML = '';
@@ -176,7 +177,7 @@ function loop() {
 
 /* ---------------- arranque / parada ---------------- */
 function empezar() {
-  if (S.modo === 'lib' && !S.base) { setBase(baseAleatoria()); }
+  if (S.modo === 'lib' && !S.fijada) { setBase(baseAleatoria()); }
   if (S.modo === 'file' && !audioEl) { alert('Sube una base o elige una.'); return; }
 
   S.bars = generarCompases(S.tema, S.esquema, S.compases);
@@ -216,10 +217,10 @@ function init() {
   if (LIB.length) setBase(baseAleatoria());
   pintarBaseSel(); pintarTemas(); pintarOpciones();
 
-  $('#otraBase').onclick = () => setBase(baseAleatoria());
+  $('#otraBase').onclick = () => setBase(baseAleatoria(), false);
   $('#start').onclick = empezar;
   $('#stop').onclick = () => { parar(); mostrar('setup'); };
-  $('#otra').onclick = () => { if (S.modo === 'lib') setBase(baseAleatoria()); empezar(); };
+  $('#otra').onclick = () => empezar();
   $('#cambiar').onclick = () => { parar(); mostrar('setup'); };
   $('#tapBtn').onclick = tap;
 
@@ -230,6 +231,7 @@ function init() {
     $('#fileInfo').textContent = f.name;
     $('#baseNombre').textContent = f.name;
     $('#baseMeta').textContent = 'tu base · marca el ritmo con TAP';
+    $('#baseTag2').textContent = '📌 tu base';
     $('#credito').textContent = '';
   };
 }

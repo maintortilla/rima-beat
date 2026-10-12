@@ -15,7 +15,8 @@ cae una **palabra** — tú dices en voz alta algo que rime justo ahí.
 4. **▶ A RIMAR** → cuenta atrás de 4 tiempos → a improvisar.
 
 ## Detalles que importan
-- **La base es aleatoria** cada vez (y "Otra vez" al terminar te pone otra distinta).
+- **La base es aleatoria** en cada partida: cada vez que le das a **▶ A RIMAR** te sale
+  una distinta (y "Otra vez" también). Si eliges una de la lista, se queda fija (📌).
 - **La pelota arranca en el "drop"**: varias bases tienen intro (a veces 10-30 s) antes
   de que entren los tambores. Cada base guarda su **segundo de entrada** medido del audio,
   y el juego empieza ahí para que el primer compás caiga en el beat (como hacen las webs
