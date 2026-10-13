@@ -11,10 +11,11 @@ const $ = (s) => document.querySelector(s);
 const S = {
   base: null, modo: 'lib', fijada: false,
   bpm: 90, spb: 60 / 90, inicio: 0,
-  tema: 'TODO', esquema: 'AABB', compases: 8,
+  tema: 'TODO', esquema: 'AABB', compases: 8, guias: true,
   bars: [], n: 8, playing: false, countIn: 4,
   raf: null, lastBar: -1, tapTimes: [],
 };
+const INTRO = 2;   // compases de intro sin palabra (solo base)
 
 let ctx = null, audioEl = null;
 
@@ -71,7 +72,10 @@ function generarCompases(temaKey, esquema, n) {
       bars.push({ palabra: rand(ws), rimas: ws, color: mapa[i] === 0 ? 'A' : 'B' });
     }
   }
-  return bars;
+  // compases de intro: solo suena la base, sin palabras
+  const intro = [];
+  for (let i = 0; i < INTRO; i++) intro.push({ palabra: '', rimas: [], color: 'A', intro: true });
+  return intro.concat(bars);
 }
 
 /* ---------------- pantallas ---------------- */
@@ -120,6 +124,13 @@ function pintarOpciones() {
     b.onclick = () => { S.compases = n; pintarOpciones(); };
     dur.appendChild(b);
   });
+  const gui = $('#guias'); gui.innerHTML = '';
+  [{ v: true, t: '👁 Sí' }, { v: false, t: '🙈 No' }].forEach((o) => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (S.guias === o.v ? ' sel' : ''); b.textContent = o.t;
+    b.onclick = () => { S.guias = o.v; pintarOpciones(); };
+    gui.appendChild(b);
+  });
 }
 
 /* ---------------- tap tempo (base propia) ---------------- */
@@ -144,10 +155,12 @@ function pintarGrid() {
     const row = document.createElement('div');
     row.className = 'row' + (b === S.lastBar ? ' active' : '');
     const track = document.createElement('div'); track.className = 'track';
+    const bar = S.bars[b];
     for (let c = 0; c < 4; c++) {
       const cell = document.createElement('div');
-      cell.className = 'cell' + (c === 3 ? ' word col-' + S.bars[b].color : '');
-      cell.textContent = (c === 3) ? S.bars[b].palabra : '';
+      const esPalabra = c === 3 && !bar.intro;
+      cell.className = 'cell' + (esPalabra ? ' word col-' + bar.color : (c === 3 ? ' word vacia' : ''));
+      cell.textContent = esPalabra ? bar.palabra : '';
       track.appendChild(cell);
     }
     if (b === S.lastBar) {
@@ -156,8 +169,20 @@ function pintarGrid() {
     }
     row.appendChild(track); grid.appendChild(row);
   }
+  actualizarPista();
+}
+function actualizarPista() {
   const cur = S.bars[S.lastBar];
-  if (cur) $('#pistaWords').textContent = cur.rimas.slice(0, 9).join(' · ');
+  const pista = $('#pista');
+  if (!S.guias) { pista.hidden = true; return; }
+  pista.hidden = false;
+  if (!cur || cur.intro || !cur.rimas.length) {
+    $('#pistaLabel').textContent = 'Intro';
+    $('#pistaWords').textContent = 'escucha la base… 🎧';
+  } else {
+    $('#pistaLabel').textContent = 'Rima con';
+    $('#pistaWords').textContent = cur.rimas.slice(0, 9).join(' · ');
+  }
 }
 
 function tSec() { return audioEl ? audioEl.currentTime - S.inicio : 0; }
@@ -173,10 +198,18 @@ function loop() {
   const cell = Math.min(3, Math.floor(beatInBar));
   const frac = beatInBar - cell;
   const ball = $('#ball');
-  if (ball) ball.style.left = (((cell + frac) / 4) * 100) + '%';
+  if (ball) {
+    ball.style.left = (((cell + frac) / 4) * 100) + '%';
+    // bote: la pelota sube y baja en cada tiempo (aterriza justo en el beat)
+    const arco = 26;
+    const subida = arco * Math.sin(Math.PI * frac);
+    ball.style.transform = `translateX(-50%) translateY(${(-subida).toFixed(1)}px)`;
+  }
   const row = document.querySelector('.row.active .track');
   if (row) [...row.children].forEach((el, i) => el.classList.toggle('on', i === cell && el.classList.contains('cell')));
-  $('#progreso').textContent = `Compas ${barIndex + 1} / ${S.n}`;
+  $('#progreso').textContent = barIndex < INTRO
+    ? 'Intro · escucha la base'
+    : `Compas ${barIndex - INTRO + 1} / ${S.compases}`;
   S.raf = requestAnimationFrame(loop);
 }
 
@@ -186,7 +219,7 @@ function empezar() {
   if (S.modo === 'file' && !audioEl) { alert('Sube una base o elige una.'); return; }
 
   S.bars = generarCompases(S.tema, S.esquema, S.compases);
-  S.n = S.compases; S.spb = 60 / S.bpm; S.lastBar = 0; S.playing = true;
+  S.n = S.compases + INTRO; S.spb = 60 / S.bpm; S.lastBar = 0; S.playing = true;
   mostrar('game'); pintarGrid();
   $('#baseTag').textContent = (S.modo === 'lib' ? S.base.nombre + ' · ' : '') + S.bpm + ' BPM';
 
@@ -211,8 +244,8 @@ function empezar() {
 function parar() { S.playing = false; cancelAnimationFrame(S.raf); if (audioEl) audioEl.pause(); }
 function terminar() {
   parar();
-  $('#rCompases').textContent = S.n;
-  $('#rPalabras').textContent = new Set(S.bars.map((b) => b.palabra)).size;
+  $('#rCompases').textContent = S.compases;
+  $('#rPalabras').textContent = new Set(S.bars.filter((b) => b.palabra).map((b) => b.palabra)).size;
   $('#rTema').textContent = S.tema === 'TODO' ? 'Todo' : S.tema;
   mostrar('review');
 }

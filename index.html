@@ -100,6 +100,7 @@
   .cell.word{display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900}
   .cell.word.col-A{background:linear-gradient(120deg,#8b5cf6,#6d3ff0);border-color:#a78bfa}
   .cell.word.col-B{background:linear-gradient(120deg,#22b8ee,#0ea5e9);border-color:#67d8ff}
+  .cell.word.vacia{background:transparent;border-style:dashed;opacity:.5}
   .ball{position:absolute;top:8px;width:20px;height:20px;border-radius:50%;
     background:var(--amar);box-shadow:0 0 16px var(--amar);transform:translateX(-50%)}
   #pista{margin-top:22px;background:var(--sup);border:1px solid var(--linea);border-radius:16px;padding:16px 18px}
@@ -148,6 +149,8 @@
       <div id="esquemas" class="chips"></div>
       <div class="sub">Duración (compases)</div>
       <div id="duraciones" class="chips"></div>
+      <div class="sub">Guías de rima (palabras sugeridas)</div>
+      <div id="guias" class="chips"></div>
     </div>
 
     <button class="cta" id="start">▶ A RIMAR</button>
@@ -183,8 +186,8 @@
   </section>
 </div>
 
-<script src="datos.js?v=3"></script>
-<script src="bases.js?v=3"></script>
-<script src="app.js?v=3"></script>
+<script src="datos.js?v=4"></script>
+<script src="bases.js?v=4"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>

@@ -17,6 +17,10 @@ cae una **palabra** — tú dices en voz alta algo que rime justo ahí.
 ## Detalles que importan
 - **La base es aleatoria** en cada partida: cada vez que le das a **▶ A RIMAR** te sale
   una distinta (y "Otra vez" también). Si eliges una de la lista, se queda fija (📌).
+- **2 compases de intro**: al empezar suenan 2 compases de base **sin palabras** para
+  escucharla y coger el ritmo antes de entrar.
+- **Pelota que bota**: la pelota salta en cada tiempo y aterriza justo en el beat.
+- **Guías de rima opcionales**: puedes mostrar las palabras que riman (Sí) o ir a pelo (No).
 - **La pelota arranca en el "drop"**: varias bases tienen intro (a veces 10-30 s) antes
   de que entren los tambores. Cada base guarda su **segundo de entrada** medido del audio,
   y el juego empieza ahí para que el primer compás caiga en el beat (como hacen las webs
