@@ -41,6 +41,7 @@ function baseAleatoria() {
 function setBase(b, fijada) {
   S.base = b; S.modo = 'lib'; S.fijada = !!fijada;
   S.bpm = b.bpm; S.spb = 60 / b.bpm; S.inicio = b.inicio || 0;
+  S.beats = (b.beats && b.beats.length > 1) ? b.beats : null; S.bi = 0;
   $('#baseNombre').textContent = b.nombre;
   $('#baseMeta').textContent = `${b.bpm} BPM · ${b.artista}`;
   $('#baseSel').value = b.archivo;
@@ -164,6 +165,8 @@ function pintarGrid() {
       track.appendChild(cell);
     }
     if (b === S.lastBar) {
+      const sh = document.createElement('div'); sh.className = 'ball-shadow'; sh.id = 'ballShadow';
+      track.appendChild(sh);
       const ball = document.createElement('div'); ball.className = 'ball'; ball.id = 'ball';
       track.appendChild(ball);
     }
@@ -187,9 +190,25 @@ function actualizarPista() {
 
 function tSec() { return audioEl ? audioEl.currentTime - S.inicio : 0; }
 
+/* posicion en "tiempos" usando los beats reales de la base (si los hay) */
+function beatPos(tAbs) {
+  const bs = S.beats;
+  if (!bs || bs.length < 2) return tAbs - S.inicio > 0 ? (tAbs - S.inicio) / S.spb : 0;
+  let i = S.bi || 0;
+  if (i > bs.length - 2) i = bs.length - 2;
+  while (i < bs.length - 1 && bs[i + 1] <= tAbs) i++;
+  while (i > 0 && bs[i] > tAbs) i--;
+  S.bi = i;
+  const span = Math.max(1e-4, bs[i + 1] - bs[i]);
+  let f = (tAbs - bs[i]) / span;
+  if (f < 0) f = 0; else if (f > 1) f = 1;
+  return i + f;
+}
+
 function loop() {
   if (!S.playing) return;
-  const beat = tSec() / S.spb;
+  const tAbs = audioEl ? audioEl.currentTime : 0;
+  const beat = beatPos(tAbs);
   if (beat < 0) { S.raf = requestAnimationFrame(loop); return; }
   const barIndex = Math.floor(beat / 4);
   if (barIndex >= S.n) { terminar(); return; }
@@ -199,11 +218,23 @@ function loop() {
   const frac = beatInBar - cell;
   const ball = $('#ball');
   if (ball) {
-    ball.style.left = (((cell + frac) / 4) * 100) + '%';
-    // bote: la pelota sube y baja en cada tiempo (aterriza justo en el beat)
-    const arco = 26;
-    const subida = arco * Math.sin(Math.PI * frac);
-    ball.style.transform = `translateX(-50%) translateY(${(-subida).toFixed(1)}px)`;
+    const x = ((cell + frac) / 4) * 100;
+    // ---- bote: sube y baja en cada tiempo; aterriza justo en el beat ----
+    const arco = 42;                                   // altura maxima del bote (px)
+    const alt = Math.sin(Math.PI * frac);              // 0 en el suelo, 1 en el aire
+    const subida = arco * alt;
+    const estira = 1 + 0.28 * alt;                     // se estira al subir
+    const encoge = 1 - 0.22 * alt;                     // se afina al subir
+    ball.style.left = x + '%';
+    ball.style.transform =
+      `translateX(-50%) translateY(${(-subida).toFixed(1)}px) scale(${encoge.toFixed(3)}, ${estira.toFixed(3)})`;
+    const sh = $('#ballShadow');
+    if (sh) {
+      const k = 1 - 0.6 * alt;                         // la sombra encoge al subir
+      sh.style.left = x + '%';
+      sh.style.transform = `translateX(-50%) scale(${k.toFixed(3)}, ${(0.5 + 0.5 * k).toFixed(3)})`;
+      sh.style.opacity = (0.6 - 0.45 * alt).toFixed(2);
+    }
   }
   const row = document.querySelector('.row.active .track');
   if (row) [...row.children].forEach((el, i) => el.classList.toggle('on', i === cell && el.classList.contains('cell')));

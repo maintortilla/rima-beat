@@ -21,10 +21,10 @@ cae una **palabra** — tú dices en voz alta algo que rime justo ahí.
   escucharla y coger el ritmo antes de entrar.
 - **Pelota que bota**: la pelota salta en cada tiempo y aterriza justo en el beat.
 - **Guías de rima opcionales**: puedes mostrar las palabras que riman (Sí) o ir a pelo (No).
-- **La pelota arranca en el "drop"**: varias bases tienen intro (a veces 10-30 s) antes
-  de que entren los tambores. Cada base guarda su **segundo de entrada** medido del audio,
-  y el juego empieza ahí para que el primer compás caiga en el beat (como hacen las webs
-  de referencia). Ese dato está en `bases/manifest.json` (campo `inicio`).
+- **Sincronía real con la música**: en vez de un BPM fijo, cada base lleva **los tiempos
+  exactos de sus beats** analizados del audio (con `librosa`), así que la pelota cae en el
+  beat de verdad, sin desviarse. El juego arranca en el primer beat tras el "drop" (donde
+  entran los tambores) y `bases/manifest.json` guarda el BPM medido y la lista de beats.
 - **Sin ajustes raros**: nada de sumar/restar milisegundos.
 
 ## Qué hay (Fase 1)
