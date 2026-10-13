@@ -28,7 +28,8 @@ cae una **palabra** — tú dices en voz alta algo que rime justo ahí.
 - **Sin ajustes raros**: nada de sumar/restar milisegundos.
 
 ## Qué hay (Fase 1)
-- **18 bases reales libres** (ccMixter, CC-BY), de 80 a 165 BPM.
+- **26 bases reales libres** (ccMixter, CC-BY), de 76 a 144 BPM, seleccionadas por su
+  carácter de hip-hop (batería y graves) para que suenen de calle.
 - **8 temas de rimas** en español + **🎲 Todo**: Amor y desamor, Dinero y éxito, Calle y hustle,
   Fiesta y lifestyle, Sueños y ambición, Dolor y mente, Comida y día a día, Poder y fama.
   Sin nombres propios ni palabras infantiles; vocabulario adulto.
