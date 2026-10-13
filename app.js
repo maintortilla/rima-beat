@@ -11,7 +11,7 @@ const $ = (s) => document.querySelector(s);
 const S = {
   base: null, modo: 'lib', fijada: false,
   bpm: 90, spb: 60 / 90, inicio: 0,
-  tema: 'mezcla', esquema: 'AABB', compases: 8,
+  tema: 'TODO', esquema: 'AABB', compases: 8,
   bars: [], n: 8, playing: false, countIn: 4,
   raf: null, lastBar: -1, tapTimes: [],
 };
@@ -50,7 +50,7 @@ function setBase(b, fijada) {
 /* ---------------- generar compases con rimas ---------------- */
 function rand(a) { return a[Math.floor(Math.random() * a.length)]; }
 function gruposDe(temaKey) {
-  if (temaKey === 'mezcla') return Object.values(DATOS.temas).flat();
+  if (temaKey === 'TODO') return Object.values(DATOS.temas).flat();
   return DATOS.temas[temaKey] || [];
 }
 function generarCompases(temaKey, esquema, n) {
@@ -89,13 +89,18 @@ function pintarBaseSel() {
   });
   sel.onchange = () => { const b = LIB.find((x) => x.archivo === sel.value); if (b) setBase(b, true); };
 }
+const EMOJI = {
+  'TODO': '🎲', 'Amor y desamor': '💔', 'Dinero y éxito': '💰', 'Calle y hustle': '🔥',
+  'Fiesta y lifestyle': '🎉', 'Sueños y ambición': '🚀', 'Dolor y mente': '🧠',
+  'Comida y día a día': '🍔', 'Poder y fama': '👑',
+};
 function pintarTemas() {
   const cont = $('#temas'); cont.innerHTML = '';
-  const opciones = ['mezcla', ...Object.keys(DATOS.temas)];
+  const opciones = ['TODO', ...Object.keys(DATOS.temas)];
   opciones.forEach((k) => {
     const b = document.createElement('button');
     b.className = 'chip' + (k === S.tema ? ' sel' : '');
-    b.textContent = k === 'mezcla' ? '🎲 Mezcla' : k.charAt(0).toUpperCase() + k.slice(1);
+    b.textContent = (EMOJI[k] || '') + ' ' + (k === 'TODO' ? 'Todo' : k);
     b.onclick = () => { S.tema = k; pintarTemas(); };
     cont.appendChild(b);
   });
@@ -208,7 +213,7 @@ function terminar() {
   parar();
   $('#rCompases').textContent = S.n;
   $('#rPalabras').textContent = new Set(S.bars.map((b) => b.palabra)).size;
-  $('#rTema').textContent = S.tema === 'mezcla' ? 'mezcla' : S.tema;
+  $('#rTema').textContent = S.tema === 'TODO' ? 'Todo' : S.tema;
   mostrar('review');
 }
 

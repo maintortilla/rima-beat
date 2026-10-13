@@ -25,7 +25,8 @@ cae una **palabra** — tú dices en voz alta algo que rime justo ahí.
 
 ## Qué hay (Fase 1)
 - **18 bases reales libres** (ccMixter, CC-BY), de 80 a 165 BPM.
-- **7 temas de rimas** en español (amor, calle, fiesta, vida, mente, fuego, hampa) + **🎲 Mezcla**.
+- **8 temas de rimas** en español + **🎲 Todo**: Amor y desamor, Dinero y éxito, Calle y hustle,
+  Fiesta y lifestyle, Sueños y ambición, Dolor y mente, Comida y día a día, Poder y fama.
   Sin nombres propios ni palabras infantiles; vocabulario adulto.
 - **Esquemas**: AABB (pareados), ABAB (alterna), AAAA (monorrima).
 - **Duración**: 8 / 16 / 32 compases.
