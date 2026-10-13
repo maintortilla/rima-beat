@@ -33,7 +33,7 @@ cae una **palabra** — tú dices en voz alta algo que rime justo ahí.
   Fiesta y lifestyle, Sueños y ambición, Dolor y mente, Comida y día a día, Poder y fama.
   Sin nombres propios ni palabras infantiles; vocabulario adulto.
 - **Esquemas**: AABB (pareados), ABAB (alterna), AAAA (monorrima).
-- **Duración**: 8 / 16 / 32 compases.
+- **Duración**: 8 / 16 / 32 compases o **🎵 Canción** (dura toda la canción).
 - **Subir tu propia base** + **TAP** para medir el ritmo (opcional, en "Subir mi propia base").
 
 ## Ficheros

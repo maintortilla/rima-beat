@@ -11,7 +11,7 @@ const $ = (s) => document.querySelector(s);
 const S = {
   base: null, modo: 'lib', fijada: false,
   bpm: 90, spb: 60 / 90, inicio: 0,
-  tema: 'TODO', esquema: 'AABB', compases: 8, guias: true,
+  tema: 'TODO', esquema: 'AABB', compases: 8, duracion: 8, guias: true,
   bars: [], n: 8, playing: false, countIn: 4,
   raf: null, lastBar: -1, tapTimes: [],
 };
@@ -54,6 +54,14 @@ function rand(a) { return a[Math.floor(Math.random() * a.length)]; }
 function gruposDe(temaKey) {
   if (temaKey === 'TODO') return Object.values(DATOS.temas).flat();
   return DATOS.temas[temaKey] || [];
+}
+/* cuantos compases con palabra: por duracion elegida o los de toda la cancion */
+function totalBarsLyric() {
+  if (S.duracion !== 'song') return S.duracion;
+  if (S.modo === 'lib' && S.base && S.base.beats && S.base.beats.length > 8) {
+    return Math.max(4, Math.floor(S.base.beats.length / 4));
+  }
+  return 400;   // base propia sin analizar: tiramos largo y corta el fin del audio
 }
 function generarCompases(temaKey, esquema, n) {
   const grupos = gruposDe(temaKey);
@@ -119,10 +127,10 @@ function pintarOpciones() {
     esq.appendChild(b);
   });
   const dur = $('#duraciones'); dur.innerHTML = '';
-  [8, 16, 32].forEach((n) => {
+  [{ v: 8, t: '8' }, { v: 16, t: '16' }, { v: 32, t: '32' }, { v: 'song', t: '🎵 Canción' }].forEach((o) => {
     const b = document.createElement('button');
-    b.className = 'chip' + (n === S.compases ? ' sel' : ''); b.textContent = n;
-    b.onclick = () => { S.compases = n; pintarOpciones(); };
+    b.className = 'chip' + (o.v === S.duracion ? ' sel' : ''); b.textContent = o.t;
+    b.onclick = () => { S.duracion = o.v; pintarOpciones(); };
     dur.appendChild(b);
   });
   const gui = $('#guias'); gui.innerHTML = '';
@@ -249,6 +257,7 @@ function empezar() {
   if (S.modo === 'lib' && !S.fijada) { setBase(baseAleatoria()); }
   if (S.modo === 'file' && !audioEl) { alert('Sube una base o elige una.'); return; }
 
+  S.compases = totalBarsLyric();
   S.bars = generarCompases(S.tema, S.esquema, S.compases);
   S.n = S.compases + INTRO; S.spb = 60 / S.bpm; S.lastBar = 0; S.playing = true;
   mostrar('game'); pintarGrid();
