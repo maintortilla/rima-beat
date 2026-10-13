@@ -75,10 +75,16 @@ function generarCompases(temaKey, esquema, n) {
     let fB = rand(grupos);
     if (grupos.length > 1) { let k = 0; while (fB.palabra === fA.palabra && k++ < 8) fB = rand(grupos); }
     const fam = [fA, fB];
+    // sin repetir palabra dentro del grupo (no puedes rimar una palabra consigo misma)
+    const usadas = new Set();
+    if (bars.length) usadas.add(bars[bars.length - 1].palabra);
     for (let i = 0; i < 4 && g + i < n; i++) {
       const f = fam[mapa[i]];
       const ws = [f.palabra, ...f.rimas];
-      bars.push({ palabra: rand(ws), rimas: ws, color: mapa[i] === 0 ? 'A' : 'B' });
+      let w = ws.find((x) => !usadas.has(x));
+      if (!w) w = rand(ws);
+      usadas.add(w);
+      bars.push({ palabra: w, rimas: ws, color: mapa[i] === 0 ? 'A' : 'B' });
     }
   }
   // compases de intro: solo suena la base, sin palabras
@@ -192,7 +198,7 @@ function actualizarPista() {
     $('#pistaWords').textContent = 'escucha la base… 🎧';
   } else {
     $('#pistaLabel').textContent = 'Rima con';
-    $('#pistaWords').textContent = cur.rimas.slice(0, 9).join(' · ');
+    $('#pistaWords').textContent = cur.rimas.filter((x) => x !== cur.palabra).slice(0, 9).join(' · ');
   }
 }
 
@@ -228,7 +234,7 @@ function loop() {
   if (ball) {
     const x = ((cell + frac) / 4) * 100;
     // ---- bote: sube y baja en cada tiempo; aterriza justo en el beat ----
-    const arco = 42;                                   // altura maxima del bote (px)
+    const arco = 58;                                   // altura maxima del bote (px)
     const alt = Math.sin(Math.PI * frac);              // 0 en el suelo, 1 en el aire
     const subida = arco * alt;
     const estira = 1 + 0.28 * alt;                     // se estira al subir
