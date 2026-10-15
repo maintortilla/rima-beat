@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RIMA BEAT — Entrena tu freestyle</title>
+<style>
+  :root{
+    --bg:#140a3a;
+    --sup:#241465;          /* tarjetas */
+    --sup2:#2f1b7d;         /* tarjeta resaltada */
+    --linea:rgba(255,255,255,.13);
+    --txt:#f1ecff;
+    --mut:#b3a3e6;
+    --violeta:#8b5cf6;      /* acento principal */
+    --cian:#22b8ee;         /* acento vivo */
+    --amar:#ffc400;         /* acento calido */
+    --fuente:"Segoe UI Variable Display","Segoe UI",system-ui,sans-serif;
+    --mono:"Cascadia Mono","Consolas",monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{
+    background:var(--bg); color:var(--txt); font:17px/1.55 var(--fuente);
+    min-height:100vh;
+  }
+  /* fondo: violeta brillante arriba que baja a oscuro (como la referencia) */
+  body::before{
+    content:""; position:fixed; inset:0; z-index:-1;
+    background:
+      radial-gradient(120% 75% at 50% -8%, #8250ff 0%, #5a2ed6 28%, #33197f 55%, #140a3a 82%);
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:30px 20px 70px}
+  header{text-align:center;margin-bottom:26px}
+  header h1{
+    margin:0; font-size:clamp(38px,6vw,56px); letter-spacing:8px; font-weight:800;
+    background:linear-gradient(90deg,#c4b5fd,#22b8ee);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  header p{margin:6px 0 0;color:var(--mut);font-size:16px}
+
+  h2{font-size:12px;text-transform:uppercase;letter-spacing:2.5px;color:var(--mut);margin:0 0 14px;font-weight:700}
+
+  .card{
+    background:var(--sup); border:1px solid var(--linea); border-radius:20px;
+    padding:22px 24px; margin-bottom:16px;
+    box-shadow:0 12px 34px rgba(0,0,0,.28);
+  }
+  .baseline{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .baseline b{font-size:25px;display:block;line-height:1.2}
+  .baseline span{color:var(--mut);font-size:14px;font-family:var(--mono)}
+  #baseTag2{color:var(--amar)!important;font-size:13px;font-family:var(--fuente)}
+  #otraBase{
+    margin-left:auto; border:0; border-radius:14px; padding:13px 20px; cursor:pointer;
+    font-size:15px; font-weight:800; color:#1a0c46;
+    background:var(--amar); transition:transform .14s, filter .14s;
+  }
+  #otraBase:hover{transform:translateY(-2px);filter:brightness(1.06)}
+  select{
+    width:100%; margin-top:14px; background:#180d48; color:var(--txt);
+    border:1px solid var(--linea); border-radius:14px; padding:12px 14px; font-size:15px; font-family:var(--fuente);
+  }
+  #credito{margin-top:12px;color:var(--mut);font-size:12.5px}
+  #credito a{color:var(--cian)}
+
+  .chips{display:flex;gap:9px;flex-wrap:wrap}
+  .chip{
+    background:#1c104f; border:1px solid var(--linea); color:var(--txt);
+    border-radius:999px; padding:11px 19px; cursor:pointer; font-size:15px; font-weight:600;
+    transition:transform .12s, background .15s, border-color .15s;
+  }
+  .chip:hover{transform:translateY(-2px);border-color:var(--violeta)}
+  .chip.sel{background:var(--violeta);border-color:var(--violeta);color:#0f0733}
+  .sub{color:var(--mut);font-size:13px;margin:18px 0 10px}
+
+  .cta{
+    width:100%; margin-top:4px; padding:21px; font-size:23px; font-weight:900; letter-spacing:1.5px;
+    border:0; border-radius:18px; cursor:pointer; color:#0b0630;
+    background:linear-gradient(100deg,#8b5cf6,#22b8ee);
+    box-shadow:0 12px 34px rgba(34,184,238,.32); transition:transform .15s, box-shadow .15s;
+  }
+  .cta:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(34,184,238,.45)}
+
+  details{margin-top:18px;color:var(--mut);font-size:14px}
+  details summary{cursor:pointer;font-weight:600}
+  .fila{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px}
+  .fila label{background:#1c104f;border:1px dashed var(--linea);border-radius:12px;padding:11px 15px;cursor:pointer}
+  #tapBtn{background:rgba(34,184,238,.16);border:1px solid var(--cian);color:var(--txt);border-radius:12px;padding:11px 15px;cursor:pointer;font-weight:700}
+  #tapInfo,#fileInfo{color:var(--amar);font-family:var(--mono)}
+
+  /* ---- juego ---- */
+  .hud{display:flex;justify-content:space-between;color:var(--mut);font-size:14px;margin-bottom:16px;font-family:var(--mono)}
+  #progreso{color:var(--cian);font-weight:700}
+  #grid{display:flex;flex-direction:column;gap:12px}
+  .row{opacity:.34;transition:opacity .25s}
+  .row.active{opacity:1}
+  .track{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .cell{background:rgba(255,255,255,.05);border:1px solid var(--linea);border-radius:16px;height:110px}
+  .cell.on{border-color:var(--cian);background:rgba(34,184,238,.22);box-shadow:0 0 20px rgba(34,184,238,.35)}
+  .cell.word{display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900}
+  .cell.word.col-A{background:linear-gradient(120deg,#8b5cf6,#6d3ff0);border-color:#a78bfa}
+  .cell.word.col-B{background:linear-gradient(120deg,#22b8ee,#0ea5e9);border-color:#67d8ff}
+  .cell.word.vacia{background:transparent;border-style:dashed;opacity:.5}
+  .ball{position:absolute;top:46px;width:26px;height:26px;border-radius:50%;
+    background:radial-gradient(circle at 35% 28%,#fff 0%,#ffe08a 40%,#ffb02e 100%);
+    box-shadow:0 0 20px var(--amar),0 0 44px rgba(255,196,0,.55),0 0 0 3px rgba(255,255,255,.12) inset;
+    transform:translateX(-50%);transform-origin:50% 100%;will-change:transform,left}
+  .ball-shadow{position:absolute;top:82px;width:38px;height:10px;border-radius:50%;
+    background:rgba(0,0,0,.55);filter:blur(2.5px);transform:translateX(-50%);
+    pointer-events:none;will-change:transform,left,opacity}
+  #pista{margin-top:22px;background:var(--sup);border:1px solid var(--linea);border-radius:16px;padding:16px 18px}
+  #pistaLabel{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:2.5px;display:block;margin-bottom:7px}
+  #pistaWords{color:var(--amar);font-weight:800;font-size:17px}
+  #stop{margin-top:18px;background:transparent;border:1px solid var(--linea);color:var(--mut);
+    border-radius:14px;padding:12px 22px;cursor:pointer;font-weight:700}
+
+  /* ---- resultado ---- */
+  #review{text-align:center}
+  #review h3{font-size:32px;margin:8px 0;color:var(--txt)}
+  .stats{display:flex;gap:16px;justify-content:center;margin:22px 0;flex-wrap:wrap}
+  .stat{background:var(--sup);border:1px solid var(--linea);border-radius:18px;padding:18px 26px;min-width:130px}
+  .stat b{display:block;font-size:38px;font-family:var(--mono);color:var(--cian)}
+  .stat span{color:var(--mut);font-size:13px}
+  .btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btns button{padding:16px 30px;border-radius:16px;border:0;cursor:pointer;font-size:17px;font-weight:800}
+  #otra{background:var(--violeta);color:#0f0733}
+  #cambiar{background:transparent;color:var(--txt);border:1px solid var(--linea)!important}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>RIMA BEAT</h1>
+    <p>Entrena tu freestyle · di la rima justo en el beat</p>
+  </header>
+
+  <section id="setup">
+    <div class="card">
+      <h2>Tu base</h2>
+      <div class="baseline">
+        <div><b id="baseNombre">Freestyle #919</b><span id="baseMeta">86.1 BPM · Blood Soul Beats</span> <em id="baseTag2" style="font-style:normal">🎲 aleatoria</em></div>
+        <button id="otraBase">🎲 Otra base</button>
+      </div>
+      <select id="baseSel" title="Elegir una base concreta"><option value="freestyle-910.mp3">Freestyle #910 · 80.7 BPM</option><option value="freestyle-915.mp3">Freestyle #915 · 86.1 BPM</option><option value="freestyle-919.mp3">Freestyle #919 · 86.1 BPM</option><option value="freestyle-916.mp3">Freestyle #916 · 86.1 BPM</option><option value="freestyle-908.mp3">Freestyle #908 · 86.1 BPM</option><option value="freestyle-918.mp3">Freestyle #918 · 86.1 BPM</option><option value="freestyle-913.mp3">Freestyle #913 · 86.1 BPM</option><option value="freestyle-917.mp3">Freestyle #917 · 86.1 BPM</option><option value="freestyle-909.mp3">Freestyle #909 · 89.1 BPM</option><option value="freestyle-914.mp3">Freestyle #914 · 89.1 BPM</option><option value="freestyle-699.mp3">Freestyle #699 · 92.3 BPM</option><option value="freestyle-911.mp3">Freestyle #911 · 92.3 BPM</option><option value="freestyle-920.mp3">Freestyle #920 · 92.3 BPM</option><option value="trap-dark-140.mp3">Dark Trap 140 · 70 BPM</option><option value="trap-melodic-140.mp3">Melodic Trap 140 · 70 BPM</option><option value="trap-off-tha-leash.mp3">Off Tha Leash · 70 BPM</option><option value="trap-aggressive-150.mp3">Aggressive Trap 150 · 75 BPM</option><option value="trap-hard-150.mp3">Hard Trap 150 · 75 BPM</option><option value="trap-dark-150.mp3">Dark Trap 150 · 75 BPM</option></select>
+      <div id="credito">Base de entrenamiento (uso privado entre amigos) · <a href="https://www.youtube.com/watch?v=H9WeueFQGdA" target="_blank" rel="noopener">ccMixter</a></div>
+    </div>
+
+    <div class="card">
+      <h2>Tema de palabras</h2>
+      <div id="temas" class="chips"><button class="chip sel">🎲 Todo</button><button class="chip">💔 Amor y desamor</button><button class="chip">💰 Dinero y éxito</button><button class="chip">🔥 Calle y hustle</button><button class="chip">🎉 Fiesta y lifestyle</button><button class="chip">🚀 Sueños y ambición</button><button class="chip">🧠 Dolor y mente</button><button class="chip">🍔 Comida y día a día</button><button class="chip">👑 Poder y fama</button></div>
+      <div class="sub">Esquema de rima</div>
+      <div id="esquemas" class="chips"><button class="chip sel">AABB</button><button class="chip">ABAB</button><button class="chip">AAAA</button></div>
+      <div class="sub">Duración (compases)</div>
+      <div id="duraciones" class="chips"><button class="chip sel">8</button><button class="chip">16</button><button class="chip">32</button><button class="chip">🎵 Canción</button></div>
+      <div class="sub">Guías de rima (palabras sugeridas)</div>
+      <div id="guias" class="chips"><button class="chip sel">👁 Sí</button><button class="chip">🙈 No</button></div>
+    </div>
+
+    <button class="cta" id="start">▶ A RIMAR</button>
+
+    <details>
+      <summary>Subir mi propia base (opcional)</summary>
+      <div class="fila">
+        <label>⬆ Elegir archivo<input type="file" id="fileBase" accept="audio/*" hidden=""></label>
+        <button id="tapBtn">🥁 Marcar ritmo</button>
+        <span id="tapInfo"></span><span id="fileInfo"></span>
+      </div>
+    </details>
+  </section>
+
+  <section id="game" hidden="">
+    <div class="hud"><span id="progreso">Compas 1</span><span id="baseTag"></span></div>
+    <div id="grid"></div>
+    <div id="pista"><span id="pistaLabel">Rima con</span><span id="pistaWords"></span></div>
+    <button id="stop">◼ Parar</button>
+  </section>
+
+  <section id="review" hidden="">
+    <h3>¡Buen trabajo! 🔥</h3>
+    <p style="color:var(--mut)">Tema <b id="rTema"></b></p>
+    <div class="stats">
+      <div class="stat"><b id="rCompases">0</b><span>compases</span></div>
+      <div class="stat"><b id="rPalabras">0</b><span>rimas</span></div>
+    </div>
+    <div class="btns">
+      <button id="otra">Otra vez</button>
+      <button id="cambiar">Cambiar</button>
+    </div>
+  </section>
+</div>
+
+<script src="datos.js?v=11"></script>
+<script src="bases.js?v=11"></script>
+<script src="app.js?v=11"></script>
+
+
+</body></html>
